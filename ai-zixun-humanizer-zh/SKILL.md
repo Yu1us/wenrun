@@ -1,6 +1,6 @@
 ---
 name: humanizer-zh
-description: Remove signs of AI-generated, translated, or overly mechanical Chinese prose. Use when rewriting, editing, or reviewing Chinese blog posts, essays, newsletters, nonfiction chapters, product analysis, or long-form commentary so they read like native Chinese writing. Trigger this skill when the user asks to 「去 AI 味」, 「润色成中文母语表达」, 「改得像博客或书里写的」, 「减少翻译腔」, or similar. Detect and fix translation-like phrasing, empty big words, formulaic contrast frames, sloganized endings, list inflation, punctuation misuse, terminology/casing inconsistencies, and paragraph rhythm that feels assembled rather than written.
+description: Remove signs of AI-generated, translated, or overly mechanical Chinese prose. Use when rewriting, editing, or reviewing Chinese blog posts, essays, newsletters, nonfiction chapters, product analysis, documentation, encyclopedic entries, or long-form commentary so they read like native Chinese writing. Trigger this skill when the user asks to 「去 AI 味」, 「润色成中文母语表达」, 「改得像博客或书里写的」, 「减少翻译腔」, 「去掉 ChatGPT 味」, or similar. Detect and fix translation-like phrasing, empty big words, formulaic contrast frames, sloganized endings, list inflation, chat-bot residue, fake attribution, formatting artifacts, punctuation misuse, terminology/casing inconsistencies, and paragraph rhythm that feels assembled rather than written.
 ---
 
 # 中文去 AI 味
@@ -8,22 +8,18 @@ description: Remove signs of AI-generated, translated, or overly mechanical Chin
 ## Overview
 
 把中文文本从「像模型拼出来的稿子」改成「像中文母语者真的写出来的文章」。
-优先处理翻译腔、结构腔、排版腔和判断腔，同时保留原文事实、立场和信息密度。
+
+优先处理翻译腔、结构腔、排版腔、判断腔和聊天机器人残留，同时保留原文事实、立场、段落功能和信息密度。对英文维基式 AI 写作检测清单，只吸收模式识别，不照搬英文语境和翻译腔表达。
 
 ## Workflow
 
-1. 先判断文本类型。
-   博客、专栏、书稿、评论、产品分析可以更有节奏和作者判断；公告、说明文、技术文档则优先保留准确和克制。
-2. 先看文章主线。
-   判断第一段在立什么题，主体每段各自承担什么功能，最后一段是不是在收同一件事。
-3. 先找最显眼的 AI 痕迹。
-   重点看英文句法直译、机械对照句、空泛结论、列表堆砌、连环冒号、破折号、过度工整的段落节奏。
-4. 再决定改写力度。
-   轻度润色只清理措辞和标点；深度改写要重排句子顺序、合并弱句、补足主语或因果关系。
-5. 保留作者原意。
-   不擅自补充事实，不把谨慎判断写成绝对论断，不把普通结论硬拔高成时代宣言。
-6. 做最后一遍朗读检查。
-   读起来要像中文原生写作，不像英文思路换成中文词汇。
+1. 先判断文本类型和语域。博客、专栏、书稿、评论、产品分析可以更有节奏和作者判断；百科、说明、法律、技术文档则优先准确、克制、可核查。
+2. 先看文章主线。判断第一段在立什么题，主体每段各自承担什么功能，最后一段是不是在收同一件事。
+3. 先找最显眼的 AI 痕迹。重点看英文句法直译、机械对照句、空泛结论、列表堆砌、连环冒号、破折号、过度工整的段落节奏、聊天机器人套话、粗体/emoji 等格式痕迹。
+4. 再决定改写力度。轻度润色只清理措辞和标点；深度改写要重排句子顺序、合并弱句、补足主语或因果关系。
+5. 保留作者原意和文本结构。除非用户要求重写结构，默认覆盖原文全部信息，尽量保留原文段落数、标题层级和事实边界。
+6. 匹配作者声音。需要个性时可以有态度、旁白、长短句变化；百科、技术、法律、参考资料不要硬塞第一人称、幽默或情绪。
+7. 做最后一遍朗读检查。读起来要像中文原生写作，不像英文思路换成中文词汇，也不像机器人在执行模板。
 
 ## Core Rules
 
@@ -44,12 +40,14 @@ description: Remove signs of AI-generated, translated, or overly mechanical Chin
 - 不强行把每段都写成三分句、排比句或工整对照句。
 - 不连续使用「首先」「其次」「最后」「与此同时」「值得注意的是」「从某种意义上说」。
 - 发现列表可以改成自然叙述时，优先改写成段落。
+- 避免标题下面先来一句复述标题的空话，再开始正文。
 
 ### 4. 保持中文节奏
 
 - 允许长短句混用，不把每句都写成同样长度。
 - 让句子有明确主语和动作，少写无主句串联。
 - 避免段落结尾总是落在大而空的价值判断上。
+- 可以保留真实细节、旁白、犹豫和不整齐的句子；不要把人味磨成样板文。
 
 ### 5. 管住文章级结构
 
@@ -60,17 +58,24 @@ description: Remove signs of AI-generated, translated, or overly mechanical Chin
 - 深度改写时，可以重排段落顺序，但不要为了工整硬凑成三段论。
 - 总结结构时，少把段落关系写成一串 `先……再……最后……`，更要看它们是不是顺着同一个问题自然往下走。
 
-### 6. 处理标点和排版
+### 6. 处理聊天机器人残留
+
+- 删除「当然」「没问题」「以下是」「希望这有帮助」「如果你需要我继续」等对话套话，除非它们本来就是对话内容。
+- 删除「让我们深入探讨」「下面是你需要知道的内容」这类路标式开场，直接进入正文。
+- 不把正文写成对用户的过度顺从或夸奖，如「你说得完全对」「这是一个很棒的问题」。
+
+### 7. 处理标点和排版
 
 - 正文引号默认用全角双引号 `""`，嵌套用全角单引号 `''`。如项目在 `CLAUDE.md`/`AGENTS.md` 里声明使用 `「」`，或用户在本轮请求里明确要求，则全篇统一改用 `「」`（嵌套用 `『』`）。两种样式不要混用。
 - 不使用长破折号 `——`，优先改成逗号、句号或拆句。
 - 不密集使用冒号 `：`，尤其避免连续多句都靠冒号展开解释。
+- 去掉不必要的粗体、emoji、图标式 bullet；正文不要靠格式制造重点。
 - 中文正文中的英文多词术语使用半角空格分词，如 `AI Design Agent`。
 - 英文术语与中文括号连写时，不在 `（` 前加空格，如 `LLM（大语言模型）`。
 - 并列英文术语用斜杠连接时，不在斜杠两侧加空格，如 `coworkers/agents`。
 - 英文品牌名使用官方大小写，如 `YouTube`、`OpenAI`、`GitHub`。
 
-### 7. 统一常见术语和日期
+### 8. 统一常见术语和日期
 
 - `token` 保持英文。
 - `API` 保持英文。
@@ -78,19 +83,28 @@ description: Remove signs of AI-generated, translated, or overly mechanical Chin
 - 数字日期写作 `2026 年 2 月 26 日`、`2 月 5 日`。
 - 中文月份叙事写作 `一月`、`二月`。
 
-### 8. 控制判断强度
+### 9. 控制判断强度和归因
 
 - 不轻易下「完全取代」「彻底结束」「只剩一种可能」这类极端结论。
 - 不做无依据的阴谋论推断、资本市场臆测或人物动机脑补。
+- 「专家认为」「多家媒体报道」「业内人士指出」这类归因必须有具体来源或上下文；没有就删掉或改成可核查事实。
 - 需要强调重要性时，先给机制，再给判断。
+
+### 10. 让文字有人的气息，但不表演
+
+- 博客、随笔、评论、newsletter 可以加入明确判断、短句、旁白或轻微不确定感。
+- 不要为了「像人」而硬加第一人称、玩笑、网络腔或戏剧化停顿。
+- 避免连续的人造金句、格言公式和假坦诚开头，如「说实话？」「事情是这样的」「X 不是工具，而是一面镜子」。
+- 对百科、技术文档、参考资料来说，清楚、直接、少废话就是合适的人类声音。
 
 ## Deep Review
 
-在以下情况，额外读取 patterns.md：
+在以下情况，额外读取 `patterns.md`：
 
 - 需要做深度改写，而不是轻度润色。
 - 需要解释「为什么这段中文有 AI 味」。
-- 文本明显带有英文原文结构、营销套话或通稿腔。
+- 文本明显带有英文原文结构、营销套话、通稿腔或维基式硬凑意义。
+- 文本有聊天机器人回复痕迹、粗体/emoji/标题热身句等格式痕迹。
 - 需要给出「修改前/修改后」示例。
 - 需要检查开头、主体、结尾之间是不是同一条主线。
 - 需要重排整篇结构，先搭一个更自然的文章骨架。
@@ -102,6 +116,7 @@ description: Remove signs of AI-generated, translated, or overly mechanical Chin
 1. 直接给改写后的版本。
 2. 如果用户要求解释，再简短指出 3 到 6 个最明显的问题。
 3. 如果用户要求保留更多原句，再补一个「轻改版」和一个「重写版」。
+4. 如果用户明确要求按检测流程交付，可给「草稿 → 仍像 AI 的问题 → 最终版」。默认不要把这个流程摊开，避免输出变啰嗦。
 
 ## Final Check
 
@@ -112,6 +127,8 @@ description: Remove signs of AI-generated, translated, or overly mechanical Chin
 - 主体段落都在服务主线，没有明显跑题段或重复段。
 - 句子之间有自然推进，不靠模板连接词硬粘。
 - 结论不过火，判断和事实强度匹配。
+- 没有聊天机器人套话、路标式开场、过度粗体、emoji 或格式装饰。
+- 没有模糊权威、猜测式补空、无来源的知名度堆砌。
 - 全文节奏不要总是「先定义、再拆项、最后拔高」，更不能让读者连续三节都能预测下一节的写法。
 - 标点、术语、日期和品牌大小写统一。
 - 引号样式全篇统一（`""` 或 `「」` 二选一），没有把两种样式混用。
